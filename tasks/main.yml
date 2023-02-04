@@ -1,29 +1,28 @@
 ---
+- name: Install role packages
+  ansible.builtin.package: name=gnupg,smartmontools,ethtool,lm-sensors,nvme-cli
 
-- name: install role packages
-  package: name=gnupg,smartmontools,ethtool,lm-sensors,nvme-cli
+- name: Add influx apt key
+  ansible.builtin.copy:
+    src: influxdata-archive_compat.gpg
+    dest: /etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg
 
-- name: add influx apt key
-  ansible.builtin.apt_key:
-   url: https://repos.influxdata.com/influxdb.key
-   state: present
+- name: Add telegraf repo
+  ansible.builtin.template:
+    src: influxdata.list
+    dest: /etc/apt/sources.list.d/influxdata.list
 
-- name: add telegraf repo
-  ansible.builtin.apt_repository:
-   repo: deb https://repos.influxdata.com/debian bullseye stable
-   state: present
+- name: Install telegraf
+  ansible.builtin.package: name=telegraf
 
-- name: install role packages
-  package: name=telegraf
-
-- name: config
-  template:
-   src: telegraf.conf
-   dest: /etc/telegraf/telegraf.conf
+- name: Configure telegraf
+  ansible.builtin.template:
+    src: telegraf.conf
+    dest: /etc/telegraf/telegraf.conf
   notify: restart telegraf
 
-- name: enable telegraf
-  service:
-   name: telegraf
-   enabled: true
-   state: started
+- name: Enable telegraf
+  ansible.builtin.service:
+    name: telegraf
+    enabled: true
+    state: started
