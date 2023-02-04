@@ -8,6 +8,12 @@ To bring into a project:
 git -C roles/ submodule add https://github.com/nihr43/telegraf-ansible.git
 ```
 
+To update:
+
+```
+git submodule update --recursive --remote
+```
+
 Required vars:
 
 - influx_url
