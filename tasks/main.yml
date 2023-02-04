@@ -1,24 +1,29 @@
 ---
 - name: Install role packages
-  ansible.builtin.package: name=gnupg,smartmontools,ethtool,lm-sensors,nvme-cli
+  ansible.builtin.package:
+    name: gnupg,smartmontools,ethtool,lm-sensors,nvme-cli
 
 - name: Add influx apt key
   ansible.builtin.copy:
     src: influxdata-archive_compat.gpg
     dest: /etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg
+    mode: 0644
 
 - name: Add telegraf repo
   ansible.builtin.template:
     src: influxdata.list
     dest: /etc/apt/sources.list.d/influxdata.list
+    mode: 0644
 
 - name: Install telegraf
-  ansible.builtin.package: name=telegraf
+  ansible.builtin.package:
+    name: telegraf
 
 - name: Configure telegraf
   ansible.builtin.template:
     src: telegraf.conf
     dest: /etc/telegraf/telegraf.conf
+    mode: 0644
   notify: restart telegraf
 
 - name: Enable telegraf
