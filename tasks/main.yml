@@ -14,6 +14,10 @@
     src: influxdata.list
     dest: /etc/apt/sources.list.d/influxdata.list
     mode: 0644
+  notify: apt update
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
 
 - name: Install telegraf
   ansible.builtin.package:

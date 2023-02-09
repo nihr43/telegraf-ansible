@@ -4,3 +4,8 @@
     name: telegraf
     state: restarted
   listen: restart telegraf
+
+- name: Apt update
+  ansible.builtin.apt:
+    update_cache: true
+  listen: apt update
